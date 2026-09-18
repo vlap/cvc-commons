@@ -1,0 +1,28 @@
+name: download_en4
+version: 1.0
+owner: "@vlapin"
+purpose: Download and reformat EN4 ocean data for EC-Earth experiments.
+software:
+  dependencies:
+    - curl
+    - netcdf/4.7
+    - cdo
+  tools:
+    - sosie
+environment:
+  hpc: "MareNostrum5"
+decision_context:
+  - title: Choice of netcdf/4.7
+    reason: MareNostrum5 compatibility; netcdf/4.9 causes segfaults in SOSIE.
+    date: 2026-05-01
+    authors: ["@vlapin"]
+inputs: []
+outputs:
+  - name: en4_formatted.nc
+    type: netcdf
+    description: Reformatted EN4 data on native grid.
+validation:
+  lint: tests/lint.sh
+  hpc: "☑️ Untested"  # Placeholder for HPC validation
+status: ⚪ Experimental
+last_verified: null

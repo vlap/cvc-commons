@@ -1,0 +1,42 @@
+# {{ name }}
+
+**Owner**: {{ owner }}
+**Status**: {{ status | default('⚪ Experimental') }}
+
+## Purpose
+{{ purpose }}
+
+## Decision Context
+{% for decision in decision_context %}
+- **{{ decision.title }}**: {{ decision.reason }}
+  *Validated*: {{ decision.date }} by {{ decision.authors | join(', ') }}
+{% endfor %}
+
+## Dependencies
+{% for dep in software.dependencies %}- {{ dep }}{% endfor %}
+
+## Tools
+{% for tool in software.tools %}- {{ tool }}{% endfor %}
+
+## Inputs/Outputs
+### Outputs
+{% for output in outputs -%}
+- `{{ output.name }}` ({{ output.type }}): {{ output.description | default('') }}
+{% endfor %}
+
+## Environment
+- **HPC**: {{ environment.hpc }}
+- **HPC Validation**: {{ validation.hpc }}
+
+## Usage
+```bash
+{{ script_content }}
+```
+
+## Validation
+- **Lint**: [results]({{ validation.lint }})
+- **Status**: {{ status | default('⚪ Experimental') }}
+
+---
+
+*Last updated*: {{ last_verified | default('Unknown') }}
