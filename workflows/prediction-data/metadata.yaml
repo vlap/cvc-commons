@@ -5,14 +5,14 @@ purpose: Download and reformat EN4 ocean data for EC-Earth experiments.
 software:
   dependencies:
     - curl
-    - netcdf/4.7
+    - netcdf/4.6
     - cdo
   tools:
     - sosie
 environment:
   hpc: "MareNostrum5"
 decision_context:
-  - title: Choice of netcdf/4.7
+  - title: Choice of netcdf/4.6
     reason: MareNostrum5 compatibility; netcdf/4.9 causes segfaults in SOSIE.
     date: 2026-05-01
     authors: ["@vlapin"]
