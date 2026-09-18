@@ -21,8 +21,6 @@ with open('WORKFLOWS.md', 'w') as f:
             f"{wf['owner']} | {status} | {last_verified} |\n"
         )
 
-# Update mkdocs.yml nav
-with open('docs/mkdocs.yml', 'r') as f:
     mkdocs_config = yaml.safe_load(f)
 
 mkdocs_config['nav'][1]['Workflows'] = [
@@ -30,5 +28,4 @@ mkdocs_config['nav'][1]['Workflows'] = [
     for wf in sorted(workflows, key=lambda x: x['name'])
 ]
 
-with open('docs/mkdocs.yml', 'w') as f:
     yaml.dump(mkdocs_config, f)
