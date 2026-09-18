@@ -15,5 +15,22 @@ jobs:
         run: |
           chmod +x workflows/prediction-data/tests/lint.sh
           ./workflows/prediction-data/tests/lint.sh
-      - name: Check dependencies
-        run: echo "Dependency check skipped; GEMINI_API_KEY not set"
+      - name: Check dependencies with Bedrock
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          pip install boto3 pyyaml
+          python3 << 'PY_EOF'
+          import boto3, json, yaml
+          bedrock = boto3.client("bedrock-runtime", region_name="us-east-1")
+          with open("workflows/prediction-data/metadata.yaml", "r") as f:
+              metadata = yaml.safe_load(f)
+          prompt = f"Check for deprecated dependencies in: {json.dumps(metadata['software'])}"
+          response = bedrock.invoke_model(
+              modelId="mistral.mistral-large-3-675b-instruct",
+              body=json.dumps({"prompt": prompt, "max_tokens": 500})
+          )
+          dep_issues = json.loads(response["body"].read())["outputs"][0]["text"]
+          print(f"::warning::Dependency Issues:\\n{dep_issues}")
+          PY_EOF
