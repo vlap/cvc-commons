@@ -34,3 +34,4 @@ last_verified: null# Test Librarian Agent
 # Debug
 # Test YAML fix
 # Manual trigger for validation
+# Final trigger with AWS secrets
