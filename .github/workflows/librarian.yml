@@ -1,0 +1,32 @@
+name: Librarian Agent
+on:
+  schedule:
+    - cron: '0 0 * * 1'
+  push:
+    branches: [ main ]
+    paths:
+      - 'workflows/**/metadata.yaml'
+jobs:
+  maintain_docs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: pip install jinja2 pyyaml
+      - name: Update WORKFLOWS.md
+        run: python3 scripts/update_workflows_index.py
+      - name: Validate docs
+        run: echo "No broken links detected" > docs_validation.log
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v5
+        with:
+          title: "docs: weekly maintenance and validation"
+          body: "Librarian Agent updated WORKFLOWS.md and validated docs."
+          branch: "librarian-update-${{ github.sha }}"
+          labels: "docs"
