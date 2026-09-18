@@ -12,3 +12,4 @@ tar -xzf ./data/en4_raw.tar.gz -C ./data/
 cdo -f nc copy ./data/en4_raw/*.gde ./data/en4/en4_formatted.nc# Intake Agent Test: Added comment for triggering
 # Re-trigger: Intake Agent
 # Re-trigger Intake Agent
+# Final test
