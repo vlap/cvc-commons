@@ -27,3 +27,4 @@ validation:
 status: ⚪ Experimental
 last_verified: null# Test Librarian Agent
 # Test link validation
+# Test Bedrock fallback
