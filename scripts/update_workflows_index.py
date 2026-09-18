@@ -21,11 +21,32 @@ with open('WORKFLOWS.md', 'w') as f:
             f"{wf['owner']} | {status} | {last_verified} |\n"
         )
 
-    mkdocs_config = yaml.safe_load(f)
+# Update mkdocs.yml (if it exists)
+if os.path.exists('docs/mkdocs.yml'):
+    with open('docs/mkdocs.yml', 'r') as f:
+        mkdocs_config = yaml.safe_load(f)
 
-mkdocs_config['nav'][1]['Workflows'] = [
-    {'name': wf['name'], 'file': f"_workflows/{wf['name']}.md"}
-    for wf in sorted(workflows, key=lambda x: x['name'])
-]
+    if mkdocs_config is None:
+        mkdocs_config = {'nav': []}
 
-    yaml.dump(mkdocs_config, f)
+    if 'nav' not in mkdocs_config:
+        mkdocs_config['nav'] = []
+
+    # Find or create the "Workflows" section
+    workflows_section = None
+    for item in mkdocs_config['nav']:
+        if isinstance(item, dict) and 'Workflows' in item:
+            workflows_section = item['Workflows']
+            break
+
+    if workflows_section is None:
+        workflows_section = []
+        mkdocs_config['nav'].append({'Workflows': workflows_section})
+
+    # Update the workflows list
+    workflows_section.clear()
+    for wf in sorted(workflows, key=lambda x: x['name']):
+        workflows_section.append({wf['name']: f"_workflows/{wf['name']}.md"})
+
+    with open('docs/mkdocs.yml', 'w') as f:
+        yaml.dump(mkdocs_config, f)
