@@ -1,11 +1,4 @@
 name: Librarian Agent
-on:
-  schedule:
-    - cron: '0 0 * * 1'
-  push:
-    branches: [ main ]
-    paths:
-      - 'workflows/**/metadata.yaml'
 jobs:
   maintain_docs:
     runs-on: ubuntu-latest
@@ -27,6 +20,7 @@ jobs:
             echo "::warning::docs/_workflows/download_en4.md not found. Generating..."
             python3 scripts/generate_docs.py
           fi
+- name: Debug AWS secrets
       - name: Suggest doc improvements
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
