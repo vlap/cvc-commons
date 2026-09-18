@@ -21,32 +21,24 @@ with open('WORKFLOWS.md', 'w') as f:
             f"{wf['owner']} | {status} | {last_verified} |\n"
         )
 
-# Update mkdocs.yml (if it exists)
-if os.path.exists('docs/mkdocs.yml'):
-    with open('docs/mkdocs.yml', 'r') as f:
-        mkdocs_config = yaml.safe_load(f)
+# Update ReadTheDocs config (.readthedocs.yaml) if it exists
+if os.path.exists('.readthedocs.yaml'):
+    with open('.readthedocs.yaml', 'r') as f:
+        rtd_config = yaml.safe_load(f)
 
-    if mkdocs_config is None:
-        mkdocs_config = {'nav': []}
+    if rtd_config is None:
+        rtd_config = {'version': 2}
 
-    if 'nav' not in mkdocs_config:
-        mkdocs_config['nav'] = []
+    # Ensure 'build.files' exists and update workflow docs
+    if 'build' not in rtd_config:
+        rtd_config['build'] = {}
+    if 'files' not in rtd_config['build']:
+        rtd_config['build']['files'] = []
 
-    # Find or create the "Workflows" section
-    workflows_section = None
-    for item in mkdocs_config['nav']:
-        if isinstance(item, dict) and 'Workflows' in item:
-            workflows_section = item['Workflows']
-            break
-
-    if workflows_section is None:
-        workflows_section = []
-        mkdocs_config['nav'].append({'Workflows': workflows_section})
-
-    # Update the workflows list
-    workflows_section.clear()
     for wf in sorted(workflows, key=lambda x: x['name']):
-        workflows_section.append({wf['name']: f"_workflows/{wf['name']}.md"})
+        docs_path = f'docs/_workflows/{wf["name"]}.md'
+        if docs_path not in rtd_config['build']['files']:
+            rtd_config['build']['files'].append(docs_path)
 
-    with open('docs/mkdocs.yml', 'w') as f:
-        yaml.dump(mkdocs_config, f)
+    with open('.readthedocs.yaml', 'w') as f:
+        yaml.dump(rtd_config, f)
