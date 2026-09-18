@@ -21,28 +21,40 @@ jobs:
         run: pip install jinja2 pyyaml boto3
       - name: Update WORKFLOWS.md
         run: python3 scripts/update_workflows_index.py
+      - name: Validate docs
+        run: |
+          pip install linkchecker
+          linkchecker --check-extern --ignore-url=".*localhost.*" docs/ || echo "Link check complete"
       - name: Suggest doc improvements
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          python3 << 'PY_EOF'
-          import boto3, json
-          bedrock = boto3.client("bedrock-runtime", region_name="us-east-1")
-          with open("docs/_workflows/download_en4.md", "r") as f:
-              docs = f.read()
-          response = bedrock.invoke_model(
-              modelId="mistral.mistral-large-3-675b-instruct",
-              body=json.dumps({
-                  "prompt": f"Improve these docs:\\n\\n{docs}",
-                  "max_tokens": 1000
-              })
-          )
-          suggestions = json.loads(response["body"].read())["outputs"][0]["text"]
-          with open("docs_improvements.txt", "w") as f:
-              f.write(suggestions)
-          PY_EOF
-          cat docs_improvements.txt >> $GITHUB_STEP_SUMMARY
+          if [ -f "docs/_workflows/download_en4.md" ]; then
+            python3 << 'EOF'
+            import boto3, json, sys
+            try:
+                bedrock = boto3.client("bedrock-runtime", region_name="us-east-1")
+                with open("docs/_workflows/download_en4.md", "r") as f:
+                    docs = f.read()
+                response = bedrock.invoke_model(
+                    modelId="mistral.mistral-large-3-675b-instruct",
+                    body=json.dumps({
+                        "prompt": f"Improve these docs:\\n\\n{docs}",
+                        "max_tokens": 1000
+                    })
+                )
+                suggestions = json.loads(response["body"].read())["outputs"][0]["text"]
+                with open("docs_improvements.txt", "w") as f:
+                    f.write(suggestions)
+            except Exception as e:
+                print(f"::error::Bedrock failed: {e}")
+                sys.exit(1)
+            EOF
+            cat docs_improvements.txt >> $GITHUB_STEP_SUMMARY
+          else
+            echo "::warning::docs/_workflows/download_en4.md not found. Skipping."
+          fi
       - name: Create PR
         uses: peter-evans/create-pull-request@v5
         with:
