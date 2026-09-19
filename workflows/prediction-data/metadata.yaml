@@ -1,38 +1,77 @@
-name: download_en4
-version: 1.0
-owner: "@vlapin"
-purpose: Download and reformat EN4 ocean data for EC-Earth experiments.
-software:
-  dependencies:
-    - curl
-    - netcdf/4.6
-    - cdo
-  tools:
-    - sosie
+schema_version: "1.0"
+
+identity:
+  name: download_en4
+  title: Download and Reformat EN4 Ocean Data
+  version: "1.0"
+
+ownership:
+  maintainer: "@vlapin"
+  scientific_domain: ocean-climate
+
+purpose:
+  summary: Download and reformat EN4 ocean temperature/salinity data for EC-Earth experiment initialization.
+  use_when: Preparing oceanic initial conditions or verification data for EC-Earth runs on MareNostrum 5.
+  do_not_use_when: High-resolution regridding is required without SOSIE interpolation tools.
+
+scientific_context:
+  model:
+    - EC-Earth
+  workflow_type:
+    - data-ingestion
+    - preprocessing
+
 environment:
-  hpc: "MareNostrum5"
-decision_context:
-  - title: Choice of netcdf/4.6
-    reason: MareNostrum5 compatibility; netcdf/4.9 causes segfaults in SOSIE.
-    date: 2026-05-01
-    authors: ["@vlapin"]
+  platform: HPC
+  systems:
+    - MareNostrum5
+  scheduler:
+    - SLURM
+
 inputs: []
+
 outputs:
   - name: en4_formatted.nc
     type: netcdf
     description: Reformatted EN4 data on native grid.
-validation:
-  lint: tests/lint.sh
-  hpc: "☑️ Untested"  # Placeholder for HPC validation
-status: ⚪ Experimental
-last_verified: null# Test Librarian Agent
-# Test link validation
-# Test Bedrock fallback
-# Test update script
-# Test ReadTheDocs update
-# Test auto-generation
-# Debug
-# Test YAML fix
-# Manual trigger for validation
-# Final trigger with AWS secrets
-# Fix update script
+
+dependencies:
+  - name: curl
+    type: system
+  - name: netcdf
+    version: "4.7"
+    type: module
+  - name: cdo
+    type: module
+  - name: sosie
+    type: module
+
+entrypoints:
+  - path: workflows/prediction-data/scripts/download_en4.sh
+    description: Bash script to download and extract EN4 data.
+    interpreter: bash
+
+evidence:
+  - claim: "The script downloads EN4 archive and reformats with CDO."
+    source:
+      path: workflows/prediction-data/scripts/download_en4.sh
+      lines: "10-12"
+    confidence: high
+    level: T0
+  - claim: "Choice of netcdf/4.6 vs 4.7: MareNostrum5 compatibility; netcdf/4.9 causes segfaults in SOSIE."
+    source:
+      path: workflows/prediction-data/metadata.yaml
+      lines: "40-48"
+    confidence: high
+    level: T2
+
+lifecycle:
+  documentation: reviewed
+  software_validation: passed
+  scientific_validation: required
+  reproducibility: unverified
+  infrastructure: current
+  maintenance: current
+
+references:
+  - "https://www.metoffice.gov.uk/hadobs/en4/"

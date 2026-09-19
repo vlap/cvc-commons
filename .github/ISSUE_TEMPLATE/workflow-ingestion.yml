@@ -1,0 +1,53 @@
+name: Workflow Ingestion
+description: Propose a new scientific or preprocessing workflow for ingestion into Climate Commons
+title: "[Ingest]: "
+labels: ["workflow-ingestion"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for contributing a workflow to Climate Commons! Provide the details below so that our automated inspection and maintainers can assess and structure it.
+  - type: input
+    id: workflow_path
+    attributes:
+      label: Workflow Script / Directory Path
+      description: Where are the scripts located in the repo or branch (e.g., `workflows/ocean-diagnostics/`)?
+      placeholder: workflows/ocean-diagnostics/
+    validations:
+      required: true
+  - type: textarea
+    id: purpose
+    attributes:
+      label: Purpose & Summary
+      description: What scientific problem or preprocessing task does this workflow solve?
+      placeholder: Downloads and regrids HadISST sea surface temperature observations for EC-Earth4 initialization...
+    validations:
+      required: true
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Why should this workflow be shared?
+      description: How does this benefit other climate researchers at BSC or externally?
+    validations:
+      required: false
+  - type: textarea
+    id: inputs_outputs
+    attributes:
+      label: Known Inputs & Outputs
+      description: List expected input datasets/formats and produced outputs (e.g. NetCDF files, plots).
+    validations:
+      required: false
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment & HPC Requirements
+      description: Specific modules (e.g. CDO, NCO, NetCDF), Python packages, or cluster target (MareNostrum 5).
+    validations:
+      required: false
+  - type: textarea
+    id: scientific_context
+    attributes:
+      label: Scientific Context & Citations
+      description: Relevant model versions, papers, or specific scientific decision rationale.
+    validations:
+      required: false

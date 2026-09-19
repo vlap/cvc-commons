@@ -1,0 +1,7 @@
+# Climate Commons Codeowners
+# Every change requires review by maintainers before merge
+
+* @vlap
+/workflows/ @vlap
+/schemas/ @vlap
+/.github/ @vlap

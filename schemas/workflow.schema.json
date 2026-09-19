@@ -1,0 +1,215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/vlap/cvc-commons/schemas/workflow.schema.json",
+  "title": "Climate Commons Workflow Schema",
+  "description": "Schema definition for scientific workflows in Climate Commons.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "identity",
+    "ownership",
+    "purpose",
+    "lifecycle"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["1.0"]
+    },
+    "identity": {
+      "type": "object",
+      "required": ["name", "title"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z0-9_-]+$"
+        },
+        "title": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      }
+    },
+    "ownership": {
+      "type": "object",
+      "required": ["maintainer"],
+      "properties": {
+        "maintainer": {
+          "type": "string"
+        },
+        "backup_maintainer": {
+          "type": "string"
+        },
+        "scientific_domain": {
+          "type": "string"
+        }
+      }
+    },
+    "purpose": {
+      "type": "object",
+      "required": ["summary"],
+      "properties": {
+        "summary": {
+          "type": "string"
+        },
+        "use_when": {
+          "type": "string"
+        },
+        "do_not_use_when": {
+          "type": "string"
+        }
+      }
+    },
+    "scientific_context": {
+      "type": "object",
+      "properties": {
+        "model": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "workflow_type": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "properties": {
+        "platform": {
+          "type": "string"
+        },
+        "systems": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "scheduler": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "inputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "type": { "type": "string" },
+          "description": { "type": "string" },
+          "optional": { "type": "boolean" }
+        }
+      }
+    },
+    "outputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "type": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "version": { "type": "string" },
+          "type": { "type": "string", "enum": ["module", "conda", "pip", "system", "binary"] }
+        }
+      }
+    },
+    "entrypoints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path"],
+        "properties": {
+          "path": { "type": "string" },
+          "description": { "type": "string" },
+          "interpreter": { "type": "string" },
+          "arguments": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["claim", "source", "confidence"],
+        "properties": {
+          "claim": { "type": "string" },
+          "source": {
+            "type": "object",
+            "required": ["path"],
+            "properties": {
+              "path": { "type": "string" },
+              "lines": { "type": "string" }
+            }
+          },
+          "confidence": {
+            "type": "string",
+            "enum": ["low", "medium", "high"]
+          },
+          "level": {
+            "type": "string",
+            "enum": ["T0", "T1", "T2", "T3"]
+          }
+        }
+      }
+    },
+    "lifecycle": {
+      "type": "object",
+      "required": [
+        "documentation",
+        "software_validation",
+        "scientific_validation",
+        "reproducibility",
+        "infrastructure",
+        "maintenance"
+      ],
+      "properties": {
+        "documentation": {
+          "type": "string",
+          "enum": ["proposed", "reviewed"]
+        },
+        "software_validation": {
+          "type": "string",
+          "enum": ["not-run", "passed", "failed"]
+        },
+        "scientific_validation": {
+          "type": "string",
+          "enum": ["unknown", "required", "reviewed", "validated"]
+        },
+        "reproducibility": {
+          "type": "string",
+          "enum": ["unknown", "unverified", "partial", "reproduced"]
+        },
+        "infrastructure": {
+          "type": "string",
+          "enum": ["unknown", "current", "migration-required", "broken"]
+        },
+        "maintenance": {
+          "type": "string",
+          "enum": ["current", "stale", "broken"]
+        }
+      }
+    },
+    "references": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

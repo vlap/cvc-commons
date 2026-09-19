@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/vlap/cvc-commons/schemas/extraction.schema.json",
+  "title": "Climate Commons Agent Extraction Schema",
+  "description": "Structured JSON schema for agentic extraction and workflow inspection.",
+  "type": "object",
+  "required": [
+    "facts",
+    "inferences",
+    "unknowns",
+    "workflow",
+    "risk_class",
+    "scientific_review_required"
+  ],
+  "properties": {
+    "facts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["claim", "source_file"],
+        "properties": {
+          "claim": { "type": "string" },
+          "source_file": { "type": "string" },
+          "lines": { "type": "string" }
+        }
+      }
+    },
+    "inferences": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["inference", "rationale", "confidence"],
+        "properties": {
+          "inference": { "type": "string" },
+          "rationale": { "type": "string" },
+          "confidence": { "type": "string", "enum": ["low", "medium", "high"] }
+        }
+      }
+    },
+    "unknowns": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "workflow": {
+      "type": "object"
+    },
+    "candidate_changes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "action", "description"],
+        "properties": {
+          "path": { "type": "string" },
+          "action": { "type": "string", "enum": ["create", "modify", "delete"] },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "risk_class": {
+      "type": "string",
+      "enum": ["A", "B", "C"]
+    },
+    "scientific_review_required": {
+      "type": "boolean"
+    }
+  }
+}

@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Schema & Code Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install -r docs/requirements.txt flake8
+
+      - name: Run ShellCheck
+        run: |
+          find workflows -name "*.sh" -exec shellcheck {} +
+
+      - name: Check Python syntax
+        run: |
+          python3 -m py_compile scripts/*.py
+          flake8 scripts/ --max-line-length=120 --extend-ignore=E501
+
+      - name: Validate workflow schemas & index consistency
+        run: |
+          python3 scripts/update_workflows_index.py
+          git diff --exit-code WORKFLOWS.md docs/workflows.md || (echo "WORKFLOWS.md or docs/workflows.md is out of sync. Please run python3 scripts/update_workflows_index.py" && exit 1)
+
+  docs:
+    name: Build Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install -r docs/requirements.txt
+
+      - name: Build MkDocs (strict mode)
+        run: |
+          mkdocs build --strict

@@ -1,0 +1,19 @@
+name: General Issue / Bug Report
+description: Report a broken workflow, documentation drift, or general repository question
+title: "[Issue]: "
+labels: ["triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Description
+      description: Describe what happened or what needs attention.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce / Logs
+      description: If this is a workflow failure, include relevant error trace and environment details.
+    validations:
+      required: false
