@@ -1,0 +1,46 @@
+site_name: Climate Commons
+site_description: Scientific workflows and computing patterns for climate research at BSC
+site_url: https://cvc-commons.readthedocs.io/
+repo_url: https://github.com/vlap/cvc-commons
+repo_name: vlap/cvc-commons
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: teal
+      accent: deep orange
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: teal
+      accent: deep orange
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - Overview: index.md
+  - Workflows:
+      - Catalog: workflows.md
+      - EN4 to ORCA: _workflows/en4-to-orca.md
+  - Decisions:
+      - "0001: NetCDF Version": decisions/0001-netcdf-version.md

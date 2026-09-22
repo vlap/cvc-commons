@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use Climate Commons workflows or documentation in your research, please cite it as below."
+title: "Climate Commons: Living Knowledge and Scientific Workflows for Climate Computing"
+authors:
+  - name: "Barcelona Supercomputing Center (BSC) Earth Sciences Department"
+  - family-names: "Lapin"
+    given-names: "V."
+    alias: "vlap"
+repository-code: "https://github.com/vlap/cvc-commons"
+license: "Apache-2.0"
+date-released: 2026-09-19
+type: software

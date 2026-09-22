@@ -1,0 +1,159 @@
+schema_version: "1.0"
+
+identity:
+  name: en4-to-orca
+  title: Interpolate EN4.2.2 to ORCA Grid
+  version: "1.0"
+
+ownership:
+  maintainer: "@vlapin"
+  scientific_domain: ocean-climate
+
+purpose:
+  summary: >
+    Interpolate EN4.2.2 monthly ocean temperature and salinity profiles
+    from the UK Met Office observational grid to the ORCA1 or ORCA025
+    grid required by NEMO-based EC-Earth ocean nudging.
+  use_when: >
+    Preparing oceanic nudging data (temperature/salinity restoring fields)
+    for EC-Earth3 seasonal or decadal prediction runs on MareNostrum5.
+  do_not_use_when: >
+    ORCA025 grid is required and SOSIE weights for that grid are not present
+    in the standard esarchive path.
+
+scientific_context:
+  model:
+    - EC-Earth3
+    - NEMO
+  workflow_type:
+    - preprocessing
+    - data-transformation
+  variables:
+    - votemper   # potential temperature (°C, post-conversion from K)
+    - vosaline   # practical salinity
+
+environment:
+  platform: HPC
+  systems:
+    - MareNostrum5
+  scheduler:
+    - LSF   # BSUB directives; MN5 supports both LSF and SLURM
+  notes: >
+    Script uses BSF BSUB headers; adapted from original Francois Massonnet
+    (2016) version by Vladimir Lapin (2019). Targets esarchive paths on MN5.
+
+inputs:
+  - name: sourcedir
+    description: >
+      Directory containing EN4.2.2 monthly NetCDF files in sub-dirs by
+      variable (thetao/, so/).
+    type: directory
+    required: true
+    default: /esarchive/obs/ukmo/en4-v4.2.2/monthly_mean
+
+  - name: mask
+    description: >
+      NEMO mesh-mask file for the target ORCA grid (defines land-sea mask,
+      grid coordinates, and cell metrics).
+    type: file
+    required: true
+    default: /esarchive/autosubmit/con_files/mesh_mask_nemo.Ec3.2_O1L75.nc
+
+  - name: outdir
+    description: Output directory on GPFS for interpolated yearly files.
+    type: directory
+    required: true
+    default: /gpfs/projects/bsc32/repository/nudging/ocean/en4-v4.2.2/ORCA1L75/fc0
+
+  - name: yearb
+    description: First year to process (inclusive).
+    type: integer
+    required: true
+    default: "2024"
+
+  - name: yeare
+    description: Last year to process (inclusive).
+    type: integer
+    required: true
+    default: "2025"
+
+  - name: grid
+    description: Target grid identifier (ORCA1 or ORCA025).
+    type: string
+    required: false
+    default: ORCA1
+
+outputs:
+  - name: temp_sal_y${YEAR}.nc
+    type: netcdf
+    description: >
+      Merged temperature (votemper) and salinity (vosaline) on the ORCA grid,
+      one file per year. Transferred to outdir via dtmv on transfer1.
+    pattern: "temp_sal_y????.nc"
+
+dependencies:
+  - name: NCO
+    version: "4.9.3"
+    type: module
+  - name: CDO
+    version: "1.9.8"
+    type: module
+  - name: sosie3.x
+    version: "3.x"
+    type: module
+    notes: SOSIE interpolator binary; loaded via 'module load sosie'
+
+entrypoints:
+  - path: workflows/en4-to-orca/scripts/interpolate_en4.2.2_to_ORCA.sh
+    description: >
+      Main interpolation script. Loops over years and months, runs SOSIE
+      for each variable, concatenates monthly files with CDO, converts
+      temperature from K to °C, renames variables to NEMO convention,
+      and transfers results to GPFS.
+    interpreter: bash
+
+evidence:
+  - claim: >
+      Script reads EN4.2.2 NetCDF files from /esarchive and writes
+      interpolated yearly files to /gpfs/projects/bsc32.
+    source:
+      path: workflows/en4-to-orca/scripts/interpolate_en4.2.2_to_ORCA.sh
+      lines: "35-37"
+    confidence: high
+    level: T0
+  - claim: >
+      SOSIE namelist templates (namelist_en4.2.2_thetao,
+      namelist_en4.2.2_so) must be present in the working directory
+      (copied from the script directory at runtime).
+    source:
+      path: workflows/en4-to-orca/scripts/interpolate_en4.2.2_to_ORCA.sh
+      lines: "47"
+    confidence: high
+    level: T0
+  - claim: >
+      Temperature is converted from Kelvin to Celsius via
+      'cdo subc,273.15' and renamed to NEMO variable votemper.
+    source:
+      path: workflows/en4-to-orca/scripts/interpolate_en4.2.2_to_ORCA.sh
+      lines: "99-100"
+    confidence: high
+    level: T0
+  - claim: >
+      NetCDF/4.9 causes segfaults in SOSIE on MareNostrum5. Use NCO/4.9.3
+      and CDO/1.9.8 as validated module versions.
+    source:
+      path: docs/decisions/0001-netcdf-version.md
+    confidence: high
+    level: T2
+
+lifecycle:
+  documentation: proposed
+  software_validation: not-run
+  scientific_validation: required
+  reproducibility: unverified
+  infrastructure: current
+  maintenance: current
+
+references:
+  - "https://www.metoffice.gov.uk/hadobs/en4/"
+  - "https://confluence.ecmwf.int/display/FCST/ORCA+grids"

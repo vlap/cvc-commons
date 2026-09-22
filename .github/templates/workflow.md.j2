@@ -1,0 +1,96 @@
+# {{ identity.title }} (`{{ identity.name }}`)
+
+**Domain**: {{ ownership.scientific_domain | default('General') }}  
+**Maintainer**: {{ ownership.maintainer }}  
+**Platform**: {{ environment.platform | default('HPC') }} ({{ environment.systems | join(', ') }})  
+
+---
+
+## Purpose
+{{ purpose.summary }}
+
+{% if purpose.use_when %}
+**When to use:** {{ purpose.use_when }}
+{% endif %}
+
+{% if purpose.do_not_use_when %}
+**When not to use:** {{ purpose.do_not_use_when }}
+{% endif %}
+
+---
+
+## Lifecycle & Validation Status
+
+| Dimension | Status |
+|:----------|:-------|
+| Documentation | `{{ lifecycle.documentation }}` |
+| Software Validation | `{{ lifecycle.software_validation }}` |
+| Scientific Validation | `{{ lifecycle.scientific_validation }}` |
+| Reproducibility | `{{ lifecycle.reproducibility }}` |
+| Infrastructure | `{{ lifecycle.infrastructure }}` |
+| Maintenance | `{{ lifecycle.maintenance }}` |
+
+---
+
+## Dependencies & Environment
+
+{% if dependencies %}
+### Software Dependencies
+{% for dep in dependencies %}
+- **{{ dep.name }}**{% if dep.version %} (version: `{{ dep.version }}`){% endif %} [{{ dep.type }}]
+{% endfor %}
+{% endif %}
+
+{% if environment.scheduler %}
+- **Scheduler**: {{ environment.scheduler | join(', ') }}
+{% endif %}
+
+---
+
+## Inputs & Outputs
+
+{% if inputs %}
+### Inputs
+{% for inp in inputs %}
+- `{{ inp.name }}` ({{ inp.type }}): {{ inp.description | default('') }}
+{% endfor %}
+{% else %}
+*No external inputs required.*
+{% endif %}
+
+{% if outputs %}
+### Outputs
+{% for out in outputs %}
+- `{{ out.name }}` ({{ out.type }}): {{ out.description | default('') }}
+{% endfor %}
+{% endif %}
+
+---
+
+## Script Implementation
+
+{% if script_content %}
+```bash
+{{ script_content | trim }}
+```
+{% else %}
+*See script files in repository.*
+{% endif %}
+
+---
+
+## Evidence & Verification
+{% if evidence %}
+{% for ev in evidence %}
+- **Claim**: {{ ev.claim }}
+  - *Source*: `{{ ev.source.path }}` (lines: {{ ev.source.lines }})
+  - *Confidence*: {{ ev.confidence }} (Trust Level: `{{ ev.level | default('T0') }}`)
+{% endfor %}
+{% endif %}
+
+{% if references %}
+## References
+{% for ref in references %}
+- [{{ ref }}]({{ ref }})
+{% endfor %}
+{% endif %}
