@@ -11,8 +11,8 @@ permissions:
   pull-requests: read
 
 engine:
-  id: copilot
-  model: claude-sonnet-4.6
+  id: gemini
+  version: "0.60.0"
 
 features:
   dangerously-disable-sandbox-agent: true
