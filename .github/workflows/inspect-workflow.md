@@ -10,9 +10,7 @@ permissions:
   issues: read
   pull-requests: read
 
-engine:
-  id: gemini
-  version: "0.60.0"
+engine: gemini
 
 features:
   dangerously-disable-sandbox-agent: true
