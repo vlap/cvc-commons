@@ -1,0 +1,90 @@
+{
+  "artifacts": [
+    {
+      "path": "output/slides.pdf",
+      "sha256": "e3eaccde17c4eb35472ee1617e57f1f684864f15727f6c27b7c5552fa6a884a8",
+      "size": 537953
+    },
+    {
+      "path": "output/overview.png",
+      "sha256": "843d1b8aa7f4c3a97819d32f8be4f5d8da0d5e83420540b34ea4d10568c2fffd",
+      "size": 809539
+    },
+    {
+      "path": "output/pngs/slide_01.png",
+      "sha256": "7a2d8864c82bf86717c53581e38338dd10b7f19bff04b94195e7be18e6a03e97",
+      "size": 62215
+    },
+    {
+      "path": "output/pngs/slide_02.png",
+      "sha256": "650e6e5c03178a955244a95f88d06460a3b5594ff305a9aaaac81bc101b4dfda",
+      "size": 124565
+    },
+    {
+      "path": "output/pngs/slide_03.png",
+      "sha256": "186235820b5e0aa2ed62e933691f9f363d7c39ce5f790dc89462df8b066e8460",
+      "size": 326347
+    },
+    {
+      "path": "output/pngs/slide_04.png",
+      "sha256": "016d68e683909d3874841a03171121b244143c33c5b21e86ad954e702047b319",
+      "size": 219122
+    },
+    {
+      "path": "output/pngs/slide_05.png",
+      "sha256": "83b40a6beaba4519630cbb4c39b14f069be048ca183cba9a1bc640abbd61e2de",
+      "size": 185040
+    },
+    {
+      "path": "output/pngs/slide_06.png",
+      "sha256": "eeb6a66815eb1f9c12a50f9e55cffaaaa4b537918252fcdc746bc8ab64b91f2e",
+      "size": 106380
+    },
+    {
+      "path": "output/pngs/slide_07.png",
+      "sha256": "5ea639f3a521e6c432af43d9b68326fece4c378cb1e1163e85036dbab9c5f5d6",
+      "size": 235146
+    },
+    {
+      "path": "output/pngs/slide_08.png",
+      "sha256": "698b6c087b81642b2c338d66ac4da705d925c0ec67e0d49b2395ace5576a3095",
+      "size": 236861
+    },
+    {
+      "path": "output/pngs/slide_09.png",
+      "sha256": "b3b8e80744e8542b5d8b20b0f247ea0f82be0405a92b2b6adb7bb87b912b6bfe",
+      "size": 224203
+    },
+    {
+      "path": "output/pngs/slide_10.png",
+      "sha256": "4fbb23b8f6fde22bb096414a60f12ed8baaa200f84b346ad01fadf5ad69ffff6",
+      "size": 233629
+    },
+    {
+      "path": "output/pngs/slide_11.png",
+      "sha256": "554bc5eca784e0b12a4cde4fc8ee9c16221eee7322e48ef993fce64772336356",
+      "size": 226747
+    },
+    {
+      "path": "output/pngs/slide_12.png",
+      "sha256": "9beaf6384a23ef5dfadf703619a83ca0d8d46418ad87ea0317fbed22a88e0159",
+      "size": 231238
+    },
+    {
+      "path": "output/pngs/slide_13.png",
+      "sha256": "7ed17cceb32562cf8ca504fbc8e87a96db3b56795cb945ccd3e5d86f8764482a",
+      "size": 53148
+    },
+    {
+      "path": "output/pngs/slide_14.png",
+      "sha256": "5b721b31884e4c6cc6e7ba7c50c8e8614f6cbfd3cc74e16b61f956c5d19c3177",
+      "size": 64207
+    }
+  ],
+  "completed_at": "2026-09-23T11:10:54.314455+02:00",
+  "entry": "main.typ",
+  "entry_sha256": "208b76b7ac659545a95d0604805dbab74331c58af3c307e6d78985b840ffa045",
+  "page_count": 14,
+  "schema_version": 1,
+  "tool": "typst_compiler.py"
+}

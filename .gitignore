@@ -44,3 +44,4 @@ scratch/
 # Tool state — never commit
 .opencode/
 .github/aw/logs/
+node_modules/
